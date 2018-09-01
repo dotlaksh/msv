@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Gallery | M.S.V</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+</head><!--/head-->
+<body>
+
+    <header id="header">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">MSV PUBLIC SCHOOL</a>
+                </div>
+                
+                <div class="collapse navbar-collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li ><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+                        <li><a href="about-us.html"><i class="fa fa-info-circle"></i> About</a></li>
+                        <li><a href="services.html"><i class="fa fa-th-list"></i> Facilites</a></li>
+                        <li class="active"><a href="portfolio.html"><i class="fa fa-picture-o"></i> Gallery</a></li>
+                        <li><a href="reports.html"><i class="fa fa-file-o"></i> Reports</a></li>
+                        <li><a href="contact-us.html"><i class="fa fa-phone"></i> Contact</a></li>                        
+                    </ul>
+                </div>
+            </div><!--/.container-->
+        </nav><!--/nav-->
+        
+    </header><!--/header-->
+    <section id="portfolio">
+        <div class="container">
+            <div class="col-md-12">
+                <div class="col-md-3 hidden-xs" style="min-height:400px;">
+                    <h2>Albums</h2>
+                    <ul class="list-group" id="album"></ul>
+                </div>
+                    <div class="col-md-9">
+                        <h2>Images</h2>
+                        <div class="row"id ="gallery"></div>
+                    </div>
+                </div>
+
+            </div>
+            <ul class="pager">
+            </ul>
+        </div>
+    <div id="modal-image-view" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+         <img id="preview-image" class="img-responsive">
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </section><!--/#portfolio-item-->
+    
+    <footer id="footer" class="midnight-blue">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    &copy; 2013 <a target="_blank" href="http://shapebootstrap.net/" title="Free Twitter Bootstrap WordPress Themes and HTML templates">ShapeBootstrap</a>. All Rights Reserved.
+                </div>
+                <div class="col-sm-6">
+                    <ul class="pull-right">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Faq</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer><!--/#footer-->
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.isotope.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/jquery.jqpagination.min.js"></script>
+
+
+    <script type="text/javascript">
+
+
+    $.get('album.php',function(data){
+            var html ='';
+            $.each(data, function (key,album) {
+                html += '<li class="list-group-item"><a href="#" class="album_name" data-albumId="'+ album.cat_id +'">'+ album.cat_name +'</a></li>';
+            });
+            $('#album').html(html);
+        });
+
+    $('#album').on('click','.album_name',function(){ 
+        var a_id = $(this).attr('data-albumId');
+        $('#gallery').html('');
+        $('#gallery').html('<div class="container col-md-offset-4"><i class="fa fa-spinner fa-5x fa-spin"></i></div>');
+
+        $.get('gall1.php?id='+a_id,function(data){
+            var html ='';
+            var thumbnail ='';
+            var server = 'http://localhost/msv/images/product/';
+            $.each(data, function (key,image){
+                thumbnail = server+image.pd_image;
+                html += '<div class="col-xs-12 col-sm-4 col-md-4">';
+                html += '<a data-toggle="modal" data-target="#modal-image-view">';
+                html += '<img id="preview" class="img-responsive" src="' + thumbnail + '">';
+                html += '</a>';
+                html += '</div>';
+            });
+            $('#gallery').html('');
+            $('#gallery').html(html);
+        });
+
+       
+    });
+    </script>
+</body>
+</html>
